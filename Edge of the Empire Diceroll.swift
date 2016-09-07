@@ -3,7 +3,7 @@
 
 import Darwin // for arc4random_uniform
 
-enum Symbol { // state value for dice faces
+enum Symbol { // state values for dice faces
 	case blank
 	case success
 	case failure
@@ -226,5 +226,5 @@ mainLoop: for index in 1..<Process.argc { // second argument and onward
 	}
 
 	// count/calc each die face and output
-	// output()
+	output()
 }
