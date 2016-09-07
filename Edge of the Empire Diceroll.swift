@@ -226,5 +226,5 @@ mainLoop: for index in 1..<Process.argc { // second argument and onward
 	}
 
 	// count/calc each die face and output
-	// output()
+	output()
 }
