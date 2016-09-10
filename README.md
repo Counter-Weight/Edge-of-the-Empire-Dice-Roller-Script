@@ -2,6 +2,8 @@
 A macOS command-line script written in Swift 3 which rolls the unconventional dice of Fantasy Flight's Star Wars tabletop role-playing game [*Star Wars: Edge of the Empire*](https://www.fantasyflightgames.com/en/products/star-wars-edge-of-the-empire/).
 
 ## Running the script for yourself
+**NOTE: this was all written before I discovered how to build and run a release version of the script, these instructions will be updated**
+
 1. Download or copy the `Edge of the Empire Diceroll.swift` file.
 2. Make the file executable via this command
 	- `$ chmod -v u+x <file path>`
