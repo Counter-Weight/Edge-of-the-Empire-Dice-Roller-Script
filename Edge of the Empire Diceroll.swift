@@ -207,7 +207,7 @@ func output() {
 var roll: [Symbol] = []
 //parses the command line argument for the number and type of dice to roll
 for arg in Process.arguments.dropFirst() { // second argument and onward, because the first argument seems to be the call to the file/command
-	let indexOfType = arg.index(before: arg.endIndex) // assuming the input was given as: DICE_NUM,DICE_TYPE. the last character should be the dice type and all previous characters form the number of dice
+	let indexOfType = arg.index(before: arg.endIndex) // assuming the input was given as: dice number, dice type ("2a"). the last character should be the dice type and all previous characters form the number of dice
 	let character = arg[indexOfType] // should be dice type
 
 	switch character {
