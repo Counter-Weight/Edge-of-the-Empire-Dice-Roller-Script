@@ -1,6 +1,3 @@
-#!/usr/bin/swift
-// ^ a "shebang" allowing command-line implementation
-
 import Darwin // for arc4random_uniform
 
 enum Symbol { // state values for dice faces
