@@ -2,7 +2,7 @@
 A macOS command-line script written in Swift 3 which rolls the unconventional dice of Fantasy Flight's Star Wars tabletop role-playing game [*Star Wars: Edge of the Empire*](https://www.fantasyflightgames.com/en/products/star-wars-edge-of-the-empire/).
 
 ## Running the script
-1.  Download the `Edge of the Empire Diceroll` file.
+1.  Download the `Edge of the Empire Diceroll` file from the file-list above or from the releases tab.
 2.  Run the script in Terminal or another macOS command-line by running the file as a command:
     -   `~/Path/To/File <dice arguments>`
     -   I went a step further for ease of use and added the command as an [alias in my bash profile](https://www.moncefbelyamani.com/create-aliases-in-bash-profile-to-assign-shortcuts-for-common-terminal-commands/), allowing me to run the command as easily as this:
@@ -11,7 +11,7 @@ A macOS command-line script written in Swift 3 which rolls the unconventional di
 
 ## Building
 1.  Download or copy the contents of the `Edge of the Empire Diceroll.swift` file.
-	-	You can simply run the source file without building a release version if you wish:
+	-	You can simply run the source file without building a release version if you wish, though it won't be as versatile:
 		-	`swift <path/to/file>`
 2.  Build it either with [Terminal](https://realm.io/news/swift-for-CLI/ "click "read more""):
     -   `swiftc <path-to-file> -o <executable name>` This will put the built file in the directory (folder) at which you ran the command (default is your home folder).
