@@ -1,4 +1,5 @@
 import Darwin // for arc4random_uniform
+import Foundation
 
 enum Symbol { // state values for dice faces
 	case blank
@@ -163,49 +164,88 @@ func rollDie(_ type: Character) -> [Symbol] {
 
 // outputs the results of a roll
 func output() {
-	// counts occurrences by counting the elements in a new array formed only of the matching items in `roll`
-	let successes = roll.filter{ $0 == .success }.count - roll.filter{ $0 == .failure }.count
-	let advantages = roll.filter{ $0 == .advantage }.count - roll.filter{ $0 == .threat }.count
-	let light = roll.filter{ $0 == .light }.count
-	let dark = roll.filter{ $0 == .dark }.count
-	let triumphs = roll.filter{ $0 == .triumph }.count
-	let despairs = roll.filter{ $0 == .despair }.count
-
-	if successes | advantages | light | dark | triumphs | despairs == 0 {
-		// checks if any of the counts aren't 0 by checking if their combined binary number is anything but 0b0
+	if roll.isEmpty {
 		print("Blank/neutral roll")
-	} else {
-		// Success/Failure
-		if successes > 0 {
-			print("\(successes) \tSuccess\((successes > 1) ? "es":"")")
-		} else if successes < 0 {
-			print("\(abs(successes)) \tFailure\((abs(successes) > 1) ? "s":"")")
-		}
-		// Advantage/Threat
-		if advantages > 0 {
-			print("\(advantages) \tAdvantage\((advantages > 1) ? "s":"")")
-		} else if advantages < 0 {
-			print("\(abs(advantages)) \tThreat\((abs(advantages) > 1) ? "s":"")")
-		}
-		// Triumph/Despair
-		if triumphs > 0 {
-			print("\(triumphs) \tTriumph\((triumphs > 1) ? "s":"")")
-		}
-		if despairs > 0 {
-			print("\(despairs) \tDespair\((despairs > 1) ? "s":"")")
-		}
-		// Light/Dark
-		if light > 0 {
-			print("\(light) \tLight Side\(((light) > 1) ? "s":"")")
-		}
-		if dark > 0 {
-			print("\(dark) \tDark Side\(((dark) > 1) ? "s":"")")
+		return
+	}
+
+	// counts occurrences by counting the elements in a new array formed only of the matching items in `roll`
+	var start = Date()
+	var successes = 0
+	var failures = 0
+	var advantages = 0
+	var threats = 0
+	var light = 0
+	var dark = 0
+	var triumphs = 0
+	var despairs = 0
+	for elem in roll {
+		switch elem {
+		case .success:
+			successes += 1
+		case .failure:
+			failures += 1
+		case .advantage:
+			advantages += 1
+		case .threat:
+			threats += 1
+		case .light:
+			light += 1
+		case .dark:
+			dark += 1
+		case .triumph:
+			triumphs += 1
+		case .despair:
+			despairs += 1
+		default:
+			continue
 		}
 	}
+	var end = Date()
+	print("count: \(end.timeIntervalSince(start))")
+
+	start = Date()
+	if successes + triumphs - despairs - threats > 0 {
+		print("SUCCESS!")
+	} else {
+		print("FAILURE!")
+	}
+	// Success/Failure
+	if successes > 0 {
+		print("\(successes) Success" + (successes > 1 ? "es":""))
+	}
+	if failures > 0 {
+		print("\(failures) Failure" + (failures > 1 ? "s":""))
+	}
+	// Advantage/Threat
+	if advantages > 0 {
+		print("\(advantages) Advantage" + (advantages > 1 ? "s":""))
+	}
+	if threats > 0 {
+		print("\(threats) Threat" + (threats > 1 ? "s":""))
+	}
+	// Triumph/Despair
+	if triumphs > 0 {
+		print("\(triumphs) Triumph" + (triumphs > 1 ? "s":""))
+	}
+	if despairs > 0 {
+		print("\(despairs) Despair" + (despairs > 1 ? "s":""))
+	}
+	// Light/Dark
+	if light > 0 {
+		print("\(light) Light Side" + (light > 1 ? "s":""))
+	}
+	if dark > 0 {
+		print("\(dark) Dark Side" + (dark > 1 ? "s":""))
+	}
+	end = Date()
+	print("output: \(end.timeIntervalSince(start))")
 }
 
+// let start1 = Date()
 var roll: [Symbol] = []
 //parses the command line argument for the number and type of dice to roll
+let start = Date()
 for arg in Process.arguments.dropFirst() { // second argument and onward, because the first argument seems to be the call to the file/command
 	let indexOfType = arg.index(before: arg.endIndex) // assuming the input was given as: dice number, dice type ("2a"). the last character should be the dice type and all previous characters form the number of dice
 	let character = arg[indexOfType] // should be dice type
@@ -224,6 +264,10 @@ for arg in Process.arguments.dropFirst() { // second argument and onward, becaus
 		break
 	}
 }
+let end = Date()
+print("parse: \(end.timeIntervalSince(start))")
 
 // count/calc each die face and output
 output()
+// let end1 = Date()
+// print("total: \(end1.timeIntervalSince(start1))")
