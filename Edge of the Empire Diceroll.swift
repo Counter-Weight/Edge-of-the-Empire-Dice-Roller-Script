@@ -164,80 +164,86 @@ func rollDie(_ type: Character) -> [Symbol] {
 
 // outputs the results of a roll
 func output() {
-	if roll.isEmpty {
-		print("Blank/neutral roll")
-		return
-	}
+	// if no die were rolled or if only blanks were rolled
+	let start2 = Date()
+		if roll.isEmpty || !roll.contains({ $0 != .blank }) { // tried checking against an array only of blanks but at large sizes it loses performance
+			print("Blank/neutral roll")
+			let end2 = Date()
+			print("blank: \(end2.timeIntervalSince(start2))")
+			return
+		}
+	let end2 = Date()
+	print("blank: \(end2.timeIntervalSince(start2))")
 
 	// counts occurrences by counting the elements in a new array formed only of the matching items in `roll`
 	var start = Date()
-	var successes = 0
-	var failures = 0
-	var advantages = 0
-	var threats = 0
-	var light = 0
-	var dark = 0
-	var triumphs = 0
-	var despairs = 0
-	for elem in roll {
-		switch elem {
-		case .success:
-			successes += 1
-		case .failure:
-			failures += 1
-		case .advantage:
-			advantages += 1
-		case .threat:
-			threats += 1
-		case .light:
-			light += 1
-		case .dark:
-			dark += 1
-		case .triumph:
-			triumphs += 1
-		case .despair:
-			despairs += 1
-		default:
-			continue
+		var successes = 0
+		var failures = 0
+		var advantages = 0
+		var threats = 0
+		var light = 0
+		var dark = 0
+		var triumphs = 0
+		var despairs = 0
+		for face in roll {
+			switch face {
+			case .success:
+				successes += 1
+			case .failure:
+				failures += 1
+			case .advantage:
+				advantages += 1
+			case .threat:
+				threats += 1
+			case .light:
+				light += 1
+			case .dark:
+				dark += 1
+			case .triumph:
+				triumphs += 1
+			case .despair:
+				despairs += 1
+			default:
+				continue
+			}
 		}
-	}
 	var end = Date()
 	print("count: \(end.timeIntervalSince(start))")
 
 	start = Date()
-	if successes + triumphs - despairs - threats > 0 {
-		print("SUCCESS!")
-	} else {
-		print("FAILURE!")
-	}
-	// Success/Failure
-	if successes > 0 {
-		print("\(successes) Success" + (successes > 1 ? "es":""))
-	}
-	if failures > 0 {
-		print("\(failures) Failure" + (failures > 1 ? "s":""))
-	}
-	// Advantage/Threat
-	if advantages > 0 {
-		print("\(advantages) Advantage" + (advantages > 1 ? "s":""))
-	}
-	if threats > 0 {
-		print("\(threats) Threat" + (threats > 1 ? "s":""))
-	}
-	// Triumph/Despair
-	if triumphs > 0 {
-		print("\(triumphs) Triumph" + (triumphs > 1 ? "s":""))
-	}
-	if despairs > 0 {
-		print("\(despairs) Despair" + (despairs > 1 ? "s":""))
-	}
-	// Light/Dark
-	if light > 0 {
-		print("\(light) Light Side" + (light > 1 ? "s":""))
-	}
-	if dark > 0 {
-		print("\(dark) Dark Side" + (dark > 1 ? "s":""))
-	}
+		if successes + triumphs - despairs - threats > 0 {
+			print("SUCCESS!")
+		} else {
+			print("FAILURE!")
+		}
+		// Success/Failure
+		if successes > 0 {
+			print("\(successes) Success" + (successes > 1 ? "es":""))
+		}
+		if failures > 0 {
+			print("\(failures) Failure" + (failures > 1 ? "s":""))
+		}
+		// Advantage/Threat
+		if advantages > 0 {
+			print("\(advantages) Advantage" + (advantages > 1 ? "s":""))
+		}
+		if threats > 0 {
+			print("\(threats) Threat" + (threats > 1 ? "s":""))
+		}
+		// Triumph/Despair
+		if triumphs > 0 {
+			print("\(triumphs) Triumph" + (triumphs > 1 ? "s":""))
+		}
+		if despairs > 0 {
+			print("\(despairs) Despair" + (despairs > 1 ? "s":""))
+		}
+		// Light/Dark
+		if light > 0 {
+			print("\(light) Light Side" + (light > 1 ? "s":""))
+		}
+		if dark > 0 {
+			print("\(dark) Dark Side" + (dark > 1 ? "s":""))
+		}
 	end = Date()
 	print("output: \(end.timeIntervalSince(start))")
 }
@@ -246,24 +252,24 @@ func output() {
 var roll: [Symbol] = []
 //parses the command line argument for the number and type of dice to roll
 let start = Date()
-for arg in Process.arguments.dropFirst() { // second argument and onward, because the first argument seems to be the call to the file/command
-	let indexOfType = arg.index(before: arg.endIndex) // assuming the input was given as: dice number, dice type ("2a"). the last character should be the dice type and all previous characters form the number of dice
-	let character = arg[indexOfType] // should be dice type
+	for arg in Process.arguments.dropFirst() { // second argument and onward, because the first argument seems to be the call to the file/command
+		let indexOfType = arg.index(before: arg.endIndex) // assuming the input was given as: dice number, dice type ("2a"). the last character should be the dice type and all previous characters form the number of dice
+		let character = arg[indexOfType] // should be dice type
 
-	switch character {
-	case "f", "c", "p", "d", "a", "s", "b": // a valid type of dice
-		if let dice = Int(arg[arg.startIndex..<indexOfType]) { // should be the number of dice of a type to roll
-			for _ in 0..<dice {
-				roll += rollDie(character)
+		switch character {
+		case "f", "c", "p", "d", "a", "s", "b": // a valid type of dice
+			if let dice = Int(arg[arg.startIndex..<indexOfType]) { // should be the number of dice of a type to roll
+				for _ in 0..<dice {
+					roll += rollDie(character)
+				}
+			} else {
+				roll += rollDie(character) // if no number was provided, roll 1 die
 			}
-		} else {
-			roll += rollDie(character) // if no number was provided, roll 1 die
+		default: // not a valid type of dice
+			print("`\(character)` is not a valid dice type, no character past the type of dice is allowed")
+			break
 		}
-	default: // not a valid type of dice
-		print("`\(character)` is not a valid dice type, no character past the type of dice is allowed")
-		break
 	}
-}
 let end = Date()
 print("parse: \(end.timeIntervalSince(start))")
 
