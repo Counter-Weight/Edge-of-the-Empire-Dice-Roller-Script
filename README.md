@@ -19,4 +19,4 @@ A macOS command-line script written in Swift 3 which rolls the unconventional di
 	1.	Create a Command-Line project which has the contents of the `Edge of the Empire Diceroll.swift` file as it's code.
 	2.	Build the project.	
 	3.	Run the file under "Products" in Terminal.
-3.  Then run the file. (see the "Running" section)
+3.  Then run the file. (see the ["Running"](https://github.com/Counter-Weight/Edge-of-the-Empire-Dice-Roller-Script#running-the-script) section)
