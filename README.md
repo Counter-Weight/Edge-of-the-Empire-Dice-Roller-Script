@@ -5,8 +5,7 @@ A macOS command-line script written in Swift 3 which rolls the unconventional di
 1.  Download the `Edge of the Empire Diceroll` file from the file-list above or from the releases tab.
 2.  Run the script in Terminal or another macOS command-line by running the file as a command:
     -   `~/Path/To/File <dice arguments>`
-    -   I went a step further for ease of use and added the command as an [alias in my bash profile](https://www.moncefbelyamani.com/create-aliases-in-bash-profile-to-assign-shortcuts-for-common-terminal-commands/), allowing me to run the command as easily as this:
-        -   `roll <dice arguments>`
+    -   I went a step further for ease of use and added the command as an [alias in my bash profile](https://www.moncefbelyamani.com/create-aliases-in-bash-profile-to-assign-shortcuts-for-common-terminal-commands/), allowing me to run the command as easily as this: `roll <dice arguments>`
     -   The command is run with this format: `roll 2f 4p`, where each "number-letter" combo is the number of dice of each type to roll. For example, if you want to roll 2 Ability dice and 1 Proficiency die you would use `roll 2a 1p`. (When only 1 die of a type is needed, you can remove the "1": `roll 2a p`).
 
 ## Building
