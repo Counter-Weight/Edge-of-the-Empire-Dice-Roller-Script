@@ -1,21 +1,25 @@
 import Darwin // for arc4random_uniform
 import Foundation
 
+let start0 = Date()
+
 enum Symbol { // state values for dice faces
-	case blank
+	// case blank // removed to simplify calculations
 	case success
 	case failure
 	case advantage
 	case threat
-	case triumph // critical_success
-	case despair // critical_failure
+	case triumph 	// critical_success
+	case despair	// critical_failure
 	case light
 	case dark
 }
 
 /* All The Die Types */
 func forceDie() -> [Symbol] {
-	switch arc4random_uniform(12) + 1 {
+	let num = arc4random_uniform(12) + 1
+
+	switch num {
 	case 1...6:
 		return [.dark]
 	case 7:
@@ -25,14 +29,16 @@ func forceDie() -> [Symbol] {
 	case 10...12:
 		return [.light, .light]
 	default:
-		return [.blank]
+		return []
 	}
 }
 
 func challengeDie() -> [Symbol] {
-	switch arc4random_uniform(12) + 1 {
+	let num = arc4random_uniform(12) + 1
+
+	switch num {
 	case 1:
-		return [.blank]
+		return []
 	case 2, 3:
 		return [.failure]
 	case 4, 5:
@@ -46,14 +52,16 @@ func challengeDie() -> [Symbol] {
 	case 12:
 		return [.despair]
 	default:
-		return [.blank]
+		return []
 	}
 }
 
 func proficiencyDie() -> [Symbol] {
-	switch arc4random_uniform(12) + 1 {
+	let num = arc4random_uniform(12) + 1
+
+	switch num {
 	case 1:
-		return [.blank]
+		return []
 	case 2, 3:
 		return [.success]
 	case 4, 5:
@@ -67,14 +75,16 @@ func proficiencyDie() -> [Symbol] {
 	case 12:
 		return [.triumph]
 	default:
-		return [.blank]
+		return []
 	}
 }
 
 func difficultyDie() -> [Symbol] {
-	switch arc4random_uniform(8) + 1 {
+	let num = arc4random_uniform(8) + 1
+
+	switch num {
 	case 1:
-		return [.blank]
+		return []
 	case 2:
 		return [.failure]
 	case 3:
@@ -86,14 +96,16 @@ func difficultyDie() -> [Symbol] {
 	case 8:
 		return [.threat, .failure]
 	default:
-		return [.blank]
+		return []
 	}
 }
 
 func abilityDie() -> [Symbol] {
-	switch arc4random_uniform(8) + 1 {
+	let num = arc4random_uniform(8) + 1
+
+	switch num {
 	case 1:
-		return [.blank]
+		return []
 	case 2, 3:
 		return [.success]
 	case 4:
@@ -105,27 +117,31 @@ func abilityDie() -> [Symbol] {
 	case 8:
 		return [.advantage, .advantage]
 	default:
-		return [.blank]
+		return []
 	}
 }
 
 func setBackDie() -> [Symbol] {
-	switch arc4random_uniform(6) + 1 {
+	let num = arc4random_uniform(6) + 1
+
+	switch num {
 	case 1, 2:
-		return [.blank]
+		return []
 	case 3, 4:
 		return [.failure]
 	case 5, 6:
 		return [.threat]
 	default:
-		return [.blank]
+		return []
 	}
 }
 
 func boostDie() -> [Symbol] {
-	switch arc4random_uniform(6) + 1 {
+	let num = arc4random_uniform(6) + 1
+
+	switch num {
 	case 1, 2:
-		return [.blank]
+		return []
 	case 3:
 		return [.advantage, .advantage]
 	case 4:
@@ -135,58 +151,74 @@ func boostDie() -> [Symbol] {
 	case 6:
 		return [.success]
 	default:
-		return [.blank]
+		return []
 	}
 }
 /* End Of The Die Types */
 
 // determines which die to roll
-func rollDie(_ type: Character) -> [Symbol] {
+func rollDice(numberOfDice number: Int, ofType type: Character) -> [Symbol] {
+	let thing : () -> [Symbol]
 	switch type {
 	case "f":
-		return forceDie()
+		thing = forceDie
 	case "c":
-		return challengeDie()
+		thing = challengeDie
 	case "p":
-		return proficiencyDie()
+		thing = proficiencyDie
 	case "d":
-		return difficultyDie()
+		thing = difficultyDie
 	case "a":
-		return abilityDie()
+		thing = abilityDie
 	case "s":
-		return setBackDie()
+		thing = setBackDie
 	case "b":
-		return boostDie()
+		thing = boostDie
 	default:
-		return [.blank]
+		print("`\(type)`, is not a valid dice type, the final character of an argument must be the type of dice")
+		return []
 	}
+
+	var result = [Symbol]()
+	for _ in 0..<number {
+		result += thing()
+	}
+	return result
 }
 
 // outputs the results of a roll
 func output() {
-	// if no die were rolled or if only blanks were rolled
 	let start2 = Date()
-		if roll.isEmpty || !roll.contains({ $0 != .blank }) { // tried checking against an array only of blanks but at large sizes it loses performance
+		// continue unlesss no die were rolled or only blanks were rolled
+		guard !roll.isEmpty else {
 			print("Blank/neutral roll")
 			let end2 = Date()
 			print("blank: \(end2.timeIntervalSince(start2))")
 			return
 		}
+		// tried checking against an array only of blanks but at large sizes it loses performance
+		/*guard roll.contains(where: {$0 != }) else {
+			print("Blank/neutral roll")
+			let end2 = Date()
+			print("blank: \(end2.timeIntervalSince(start2))")
+			return
+		}*/
 	let end2 = Date()
 	print("blank: \(end2.timeIntervalSince(start2))")
 
 	// counts occurrences by counting the elements in a new array formed only of the matching items in `roll`
 	var start = Date()
-		var successes = 0
-		var failures = 0
-		var advantages = 0
-		var threats = 0
-		var light = 0
-		var dark = 0
-		var triumphs = 0
-		var despairs = 0
-		for face in roll {
-			switch face {
+		var successes = 0,
+			failures = 0,
+			advantages = 0,
+			threats = 0,
+			light = 0,
+			dark = 0,
+			triumphs = 0,
+			despairs = 0
+
+		for dieFace in roll {
+			switch dieFace {
 			case .success:
 				successes += 1
 			case .failure:
@@ -203,8 +235,6 @@ func output() {
 				triumphs += 1
 			case .despair:
 				despairs += 1
-			default:
-				continue
 			}
 		}
 	var end = Date()
@@ -218,62 +248,64 @@ func output() {
 		}
 		// Success/Failure
 		if successes > 0 {
-			print("\(successes) Success" + (successes > 1 ? "es":""))
+			print("\(successes) Success"/* + (successes > 1 ? "es" : "")*/)
 		}
 		if failures > 0 {
-			print("\(failures) Failure" + (failures > 1 ? "s":""))
+			print("\(failures) Failure"/* + (failures > 1 ? "s" : "")*/)
 		}
 		// Advantage/Threat
 		if advantages > 0 {
-			print("\(advantages) Advantage" + (advantages > 1 ? "s":""))
+			print("\(advantages) Advantage"/* + (advantages > 1 ? "s" : "")*/)
 		}
 		if threats > 0 {
-			print("\(threats) Threat" + (threats > 1 ? "s":""))
+			print("\(threats) Threat"/* + (threats > 1 ? "s" : "")*/)
 		}
 		// Triumph/Despair
 		if triumphs > 0 {
-			print("\(triumphs) Triumph" + (triumphs > 1 ? "s":""))
+			print("\(triumphs) Triumph"/* + (triumphs > 1 ? "s" : "")*/)
 		}
 		if despairs > 0 {
-			print("\(despairs) Despair" + (despairs > 1 ? "s":""))
+			print("\(despairs) Despair"/* + (despairs > 1 ? "s" : "")*/)
 		}
 		// Light/Dark
 		if light > 0 {
-			print("\(light) Light Side" + (light > 1 ? "s":""))
+			print("\(light) Light Side"/* + (light > 1 ? "s" : "")*/)
 		}
 		if dark > 0 {
-			print("\(dark) Dark Side" + (dark > 1 ? "s":""))
+			print("\(dark) Dark Side"/* + (dark > 1 ? "s" : "")*/)
 		}
 	end = Date()
 	print("output: \(end.timeIntervalSince(start))")
 }
 
 // let start1 = Date()
-var roll: [Symbol] = []
+var roll = [Symbol]()
 //parses the command line argument for the number and type of dice to roll
 let start = Date()
-	for arg in Process.arguments.dropFirst() { // second argument and onward, because the first argument seems to be the call to the file/command
-		let indexOfType = arg.index(before: arg.endIndex) // assuming the input was given as: dice number, dice type ("2a"). the last character should be the dice type and all previous characters form the number of dice
-		let character = arg[indexOfType] // should be dice type
+	for dicePool in CommandLine.arguments.dropFirst() { // second argument and onward, because the first argument seems to be the call to the file/command
+		// let indexOfType = dicePool.index(before: arg.endIndex) // assuming the input was given as: dice number, dice type ("2a"). the last character should be the dice type and all previous characters form the number of dice
+		guard let diceType = dicePool.characters.last else {
+			print("no dice-type was specified")
+			continue
+		} // should be dice type
 
-		switch character {
-		case "f", "c", "p", "d", "a", "s", "b": // a valid type of dice
-			if let dice = Int(arg[arg.startIndex..<indexOfType]) { // should be the number of dice of a type to roll
-				for _ in 0..<dice {
-					roll += rollDie(character)
-				}
-			} else {
-				roll += rollDie(character) // if no number was provided, roll 1 die
-			}
-		default: // not a valid type of dice
-			print("`\(character)` is not a valid dice type, no character past the type of dice is allowed")
+		/*guard ["f", "c", "p", "d", "a", "s", "b"].contains(diceType) else {*//*
+			// not a valid type of dice
+			print("for `\(dicePool)`, `\(diceType)`, is not a valid dice type, the final character of an argument must be the type of dice")
 			break
-		}
+		}*/
+		// should be the number of dice of a type to roll
+		/*guard let dice = Int(String(dicePool.characters.dropLast())) else {
+			roll += rollDie(ofType: diceType) // if no number was provided, roll 1 die
+			continue
+		}*/
+		let dice = Int(String(dicePool.characters.dropLast())) ?? 1
+		roll += rollDice(numberOfDice: dice, ofType: diceType)
 	}
 let end = Date()
 print("parse: \(end.timeIntervalSince(start))")
 
 // count/calc each die face and output
 output()
-// let end1 = Date()
-// print("total: \(end1.timeIntervalSince(start1))")
+let end0 = Date()
+print("total: \(end0.timeIntervalSince(start0))")
