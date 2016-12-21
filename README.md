@@ -14,7 +14,7 @@ A macOS command-line script written in Swift 3 which rolls the unconventional di
 	-	You can simply run the source file without building a release version if you wish:
 		-	`swift <path/to/file>`
 2.  Build it either with [Terminal](https://realm.io/news/swift-for-CLI/ "click "read more""):
-    -   `swiftc <path-to-file> -o <executable name>` This will put the built file in the directory (folder) at which you ran the command (default is your home folder).
+    -   `swiftc -O <path-to-file> -o <executable name>` This will put the built file in the directory (folder) at which you ran the command (default is your home folder).
 
 	or with Xcode:	
 	1.	Create a Command-Line project which has the contents of the `Edge of the Empire Diceroll.swift` file as it's code.
